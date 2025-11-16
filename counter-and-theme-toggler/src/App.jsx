@@ -1,35 +1,71 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-function App() {
-  const [count, setCount] = useState(0)
-
+import React, { useState } from "react";
+import { FaToggleOff, FaToggleOn } from "react-icons/fa";
+import "./index.css";
+const App = () => {
+  const [count, setCount] = useState(0);
+  const [darkMode, setDarkMode] = useState(false);
+  const [isDisabled, setDisabled] = useState(false);
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      <div
+        className={`transition duration-1000 ${
+          darkMode ? "bg-black text-white" : ""
+        }`}
+      >
+        <button
+          disabled={isDisabled}
+          onClick={() => {
+            setDarkMode(!darkMode);
+            setDisabled(true);
 
-export default App
+            setTimeout(() => {
+              setDisabled(false);
+            }, 1000);
+          }}
+          className="flex justify-center w-full cursor-pointer"
+        >
+          {darkMode ? (
+            <FaToggleOn className="w-10 h-10" />
+          ) : (
+            <FaToggleOff className="w-10 h-10" />
+          )}
+        </button>
+        <div className="flex items-center justify-center flex-col">
+          <div className="w-full flex justify-center gap-3">
+            <button
+              className={` ${
+                darkMode ? "border-white" : "border-black"
+              }  border`}
+              onClick={() => {
+                if (count > 0) setCount(count - 1);
+              }}
+            >
+              -
+            </button>
+            <span>{count}</span>
+            <button
+              className={` ${
+                darkMode ? "border-white" : "border-black"
+              }  border`}
+              onClick={() => {
+                setCount(count + 1);
+              }}
+            >
+              +
+            </button>
+          </div>
+          <button
+            className={` ${darkMode ? "border-white" : "border-black"}  border`}
+            onClick={() => {
+              setCount(0);
+            }}
+          >
+            reset
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default App;
