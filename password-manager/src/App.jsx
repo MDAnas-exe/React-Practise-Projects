@@ -17,6 +17,11 @@ const App = () => {
   };
   const addCredentials = () => {
     setInfos([...infos, { ...formValues, id: uuidv4(), showPass: false }]);
+    setFormValues({
+      service: "",
+      username: "",
+      password: "",
+    });
   };
   const togglePassDisplay = (id) => {
     setInfos((prev) =>
@@ -24,6 +29,9 @@ const App = () => {
         info.id === id ? { ...info, showPass: !info.showPass } : info
       )
     );
+  };
+  const deletePassword = (id) => {
+    setInfos((prev) => prev.filter((info) => info.id !== id));
   };
 
   return (
@@ -33,7 +41,7 @@ const App = () => {
           type="text"
           name="service"
           placeholder="Enter service"
-          className="border border-black w-1/4"
+          className="border border-black w-60"
           onChange={handleChange}
           value={formValues.service}
         />
@@ -41,7 +49,7 @@ const App = () => {
           type="text"
           name="username"
           placeholder="Enter username"
-          className="border border-black w-1/4"
+          className="border border-black w-60"
           onChange={handleChange}
           value={formValues.username}
         />
@@ -49,11 +57,22 @@ const App = () => {
           type="password"
           name="password"
           placeholder="Enter password"
-          className="border border-black w-1/4"
+          className="border border-black w-60"
           onChange={handleChange}
           value={formValues.password}
         />
-        <button className="border border-black w-1/4" onClick={addCredentials}>
+        <button
+          className="border border-black w-60 disabled:bg-slate-200 "
+          onClick={addCredentials}
+          disabled={
+            !formValues.password || !formValues.username || !formValues.service
+          }
+          title={
+            !formValues.password || !formValues.username || !formValues.service
+              ? "Cannot add empty field"
+              : ""
+          }
+        >
           Add
         </button>
       </div>
@@ -61,31 +80,41 @@ const App = () => {
         {infos.map((info) => {
           return (
             <div key={info.id} id={info.id}>
-              <p>Service: {info.service}</p>
-              <p>Username: {info.username}</p>
-              <div className="flex transition-all duration-300">
+              <p className="border border-black w-60">
+                Service: {info.service}
+              </p>
+              <p className=" border border-black w-60">
+                Username: {info.username}
+              </p>
+              <div className="flex border border-black w-60 items-center justify-between">
                 <input
                   type={info.showPass ? "text" : "password"}
                   value={info.password}
                   disabled
                   className="disabled:bg-white "
                 />
-                {info.showPass ? (
-                  <FaRegEyeSlash
-                    className="cursor-pointer "
-                    onClick={() => {
-                      togglePassDisplay(info.id);
-                    }}
-                  />
-                ) : (
+                <div className="relative bottom-2">
                   <FaRegEye
-                    className="cursor-pointer "
-                    onClick={() => {
-                      togglePassDisplay(info.id);
-                    }}
+                    className={`absolute right-2  cursor-pointer transition-opacity duration-300 ${
+                      info.showPass ? "opacity-0" : "opacity-100"
+                    }`}
+                    onClick={() => togglePassDisplay(info.id)}
                   />
-                )}
+                  <FaRegEyeSlash
+                    className={`absolute right-2  cursor-pointer transition-opacity duration-300 ${
+                      info.showPass ? "opacity-100" : "opacity-0"
+                    }`}
+                    onClick={() => togglePassDisplay(info.id)}
+                  />
+                </div>
               </div>
+              <button
+                onClick={() => {
+                  deletePassword(info.id);
+                }}
+              >
+                Delete
+              </button>
             </div>
           );
         })}
