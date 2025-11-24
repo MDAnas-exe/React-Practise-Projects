@@ -34,7 +34,7 @@ const Signup = () => {
       />
       {errors.password && <p>{errors.password.message}</p>}
 
-      <input type="submit" />
+      <input type="submit" className="w-full bg-red-600" />
     </form>
   );
 };

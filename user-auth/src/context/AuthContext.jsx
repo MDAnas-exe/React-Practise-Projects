@@ -24,7 +24,8 @@ export const AuthProvider = ({ children }) => {
     return false;
   };
   const logout = () => {
-    setIsLoggedIn[!isLoggedIn];
+    setIsLoggedIn(!isLoggedIn);
+    localStorage.setItem("isLoggedIn", "false");
   };
 
   const signup = (email, password) => {

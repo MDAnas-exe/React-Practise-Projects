@@ -26,7 +26,7 @@ const Navbar = () => {
         </>
       ) : (
         <>
-          <span>Home</span> <button>Logout</button>
+          <span>Home</span> <button onClick={logout}>Logout</button>
         </>
       )}
     </div>
