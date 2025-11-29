@@ -18,7 +18,20 @@ const App = () => {
     setFilteredList(filtered);
   };
 
-  const List = memo(({ name }) => <li className="w-32">{name}</li>);
+  const List = memo(({ name, query }) => {
+    const lowerName = name.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    const start = lowerName.indexOf(lowerQuery);
+    if (start === -1) return <li className="w-32">{name}</li>;
+    const end = start + query.length;
+    return (
+      <li className="w-32">
+        {name.slice(0, start)}
+        <span className="text-red-600">{name.slice(start, end)}</span>
+        {name.slice(end)}
+      </li>
+    );
+  });
 
   return (
     <div>
@@ -34,7 +47,7 @@ const App = () => {
 
       <ul className="flex flex-wrap">
         {filteredList.map((item) => (
-          <List name={item.name} key={item.id} />
+          <List name={item.name} key={item.id} query={value} />
         ))}
       </ul>
     </div>
